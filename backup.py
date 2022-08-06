@@ -16,9 +16,10 @@ def upload_files(folders):
             for i in folders :
                 #since our folder is like folder_name-file_name:
                 # Here we check if we've found a folder present in our folder name dictionary
-                ab = str((root.split("-")[0])).split("\\")
+                ab = str((root.split("-")[0])).split("\\") #for windows System
+                ab1 = str((root.split("-")[0])).split("/") #for Linux System
                 # print(folders[i], " -- ",ab[-1])
-                if folders[i] == ab[-1] :
+                if folders[i] == ab[-1]  or folders[i] == ab1[-1]:
                     for file_name in files :
                         #absolute path of the source file
                         source = os.path.join(root, file_name)
@@ -42,7 +43,10 @@ def delete_folder_files(folders):
     try:
         for (root, dirs, files) in os.walk('record', topdown=True):
             for i in folders:
-                if folders[i] == str((root.split("-")[0])).split("\\")[-1]:
+                ab = str((root.split("-")[0])).split("\\")  # for windows System
+                ab1 = str((root.split("-")[0])).split("/")  # for Linux System
+                # print(folders[i], " -- ",ab[-1])
+                if folders[i] == ab[-1] or folders[i] == ab1[-1]:
                     # delete the file and the folder from where it belongs to
                     shutil.rmtree(root)
                     print('Deleted:', root)
