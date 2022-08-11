@@ -30,25 +30,26 @@ def upload_files(folders, records):
                 # print(folders[i], " -- ",ab[-1])
                 if folders[i] == ab[-1]  or folders[i] == ab1[-1]:
                     for file_name in files :
-
+                        # print(file_name)
                         if file_name.endswith(".mp4") :
                             # print(file_name)
                             #absolute path of the source file
                             source = os.path.join(root, file_name)
+                            # print("Root : ", root)
                             #Move the file to google drive
                             # 1- Create the file into google drive location with the same name present on our machine
-                            file1 = drive.CreateFile({'parents': [{'id': i}], 'title': file_name})
+                            file1 = drive.CreateFile({'parents': [{'id': i}], 'title': file_name,"mimeType":"video/mp4"})
                             #2- set the content of the file == to the content of the source file
                             file1.SetContentFile(source)
                             #upload the file
                             file1.Upload()
                             print('Moved:', file_name)
 
-                            #add the folder name to the leist of folder to be deleted
-                            if folders[i] == ab[-1] and folders[i] not in records:
-                                records.append(ab[-1])
-                            if folders[i] == ab1[-1] and folders[i] not in records:
-                                records.append(ab1[-1])
+                            #add the folder name to the list of folder to be deleted
+                            if  root not in records:
+                                records.append(root)
+                            # if folders[i] == ab1[-1] and folders[i] not in records:
+                            #     records.append(ab1[-1])
     except Exception as e:
         # check.value = 1
         print(" -- Error During Upload \n\n error : ", e)
@@ -64,14 +65,14 @@ def delete_folder_files(folders, records):
     print('--------------------------------')
     try:
         for (root, dirs, files) in os.walk('record', topdown=True):
-            for i in folders:
-                ab = str((root.split("-")[0])).split("\\")  # for windows System
-                ab1 = str((root.split("-")[0])).split("/")  # for Linux System
-                # print(folders[i], " -- ",ab[-1])
-                if folders[i] == ab[-1] or folders[i] == ab1[-1]:
+            # for i in folders:
+            #     ab = str((root.split("-")[0])).split("\\")  # for windows System
+            #     ab1 = str((root.split("-")[0])).split("/")  # for Linux System
+            #     # print(folders[i], " -- ",ab[-1])
+            #     if folders[i] == ab[-1] or folders[i] == ab1[-1]:
                     # delete the file and the folder from where it belongs to
                     # print(records)
-                    if folders[i] in records :
+                    if root in records :
                         shutil.rmtree(root)
                         print('Deleted:', root)
 
